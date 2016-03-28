@@ -3,8 +3,8 @@ var router = express.Router();
 var pg = require('pg');
 var bodyParser = require('body-parser');
 
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+router.use(bodyParser.json()); // support json encoded bodies
+router.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 router.get('/', function(request, response){
 	//var user_email = request.body.user_email;
