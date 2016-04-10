@@ -6,8 +6,16 @@ var pg = require('pg');
 //router.use(bodyParser.json()); // support json encoded bodies
 //router.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-function isEmpty(str) {
+function isEmptyString(str) {
     return (!str || str.length === 0);
+}
+
+function isEmptyObject(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+    return true;
 }
 
 router.get('/', function(request, response){
@@ -16,10 +24,10 @@ router.get('/', function(request, response){
 	var user_email = request.query.user_email;
 	var user_password = request.query.user_password;
 	
-	if(isEmpty(user_email)){
+	if(isEmptyString(user_email)){
 		return response.send("Error: Email Missing");
 	}
-	if(isEmpty(user_password)){
+	if(isEmptyString(user_password)){
 		return response.send("Error: Password Missing");
 	}
 
@@ -35,7 +43,9 @@ router.get('/', function(request, response){
        			response.send("Error " + err);  //Is this the proper way to report an error
        		}
       		else{ 
-      			if(result.rows[0].user_password === user_password)
+      			if(result.rowCount == 0)
+      				return response.send("Error: Invalid User Name.");
+      			else if(result.rows[0].user_password === user_password)
       				return response.send(result.rows);
       			else
       				return response.send("Error: Invalid User Name or Password");
