@@ -10,9 +10,10 @@ router.get('/', function(request, response){
 	//var user_email = request.body.user_email;
 	//var user_password = request.body.user_password;
 	var user_email = request.params.user_email;
+	console.log(user_email);
 
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-		client.query('SELECT * FROM user_table WHERE user_email=$1::text', [user_email] ,function(err, result) {
+		client.query('SELECT * FROM user_table WHERE user_email=\'$1::text\'', [user_email] ,function(err, result) {
       		done();
       		if (err)
        		{ 
@@ -21,6 +22,7 @@ router.get('/', function(request, response){
        		}
       		else
       		{ 
+      			console.log(result.rows);
       			response.send(result.rows);
       		}
     	});
