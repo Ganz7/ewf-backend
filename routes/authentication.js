@@ -13,7 +13,7 @@ router.get('/', function(request, response){
 	console.log(user_email);
 
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-		client.query('SELECT * FROM user_table WHERE user_email=\'$1::text\'', [user_email] ,function(err, result) {
+		client.query('SELECT * FROM user_table WHERE user_email = $1', ['mo@name.com'] ,function(err, result) {
       		done();
       		if (err)
        		{ 
