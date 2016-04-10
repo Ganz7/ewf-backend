@@ -45,8 +45,8 @@ router.get('/', function(request, response){
       		else{ 
       			if(result.rowCount == 0)
       				return response.send("Error: Invalid User Name.");
-      			else if(result.rows[0].user_password === user_password)
-      				return response.send(result.rows);
+      			else if(result.rowCount == 1 && result.rows[0].user_password === user_password)
+      				return response.send(result.rows[0]);
       			else
       				return response.send("Error: Invalid User Name or Password");
       		}
