@@ -7,7 +7,7 @@ var pg = require('pg');
 //router.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 function isEmpty(str) {
-    return (!str || 0 === str.length);
+    return (!str || str.length === 0);
 }
 
 router.get('/', function(request, response){
@@ -17,24 +17,26 @@ router.get('/', function(request, response){
 	var user_password = request.query.user_password;
 	
 	if(isEmpty(user_email)){
-		response.send("Error: Email Missing");
+		return response.send("Error: Email Missing");
 	}
 	if(isEmpty(user_password)){
-		response.send("Error: Password Missing");
+		return response.send("Error: Password Missing");
 	}
 
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+		if(err){
+			console.error(err);
+			return response.send("Error " + err);
+		}
 		client.query('SELECT * FROM user_table WHERE user_email = $1', [user_email] ,function(err, result) {
       		done();
-      		if (err)
-       		{ 
+      		if (err){ 
        			console.error(err); 
        			response.send("Error " + err);  //Is this the proper way to report an error
        		}
-      		else
-      		{ 
+      		else{ 
       			console.log(result.rows);
-      			response.send(result.rows);
+      			return response.send(result.rows);
       		}
     	});
   	});
