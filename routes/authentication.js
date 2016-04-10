@@ -35,8 +35,10 @@ router.get('/', function(request, response){
        			response.send("Error " + err);  //Is this the proper way to report an error
        		}
       		else{ 
-      			console.log(result.rows);
-      			return response.send(result.rows);
+      			if(result.rows[0].user_password === user_password)
+      				return response.send(result.rows);
+      			else
+      				return response.send("Error: Invalid User Name or Password");
       		}
     	});
   	});
