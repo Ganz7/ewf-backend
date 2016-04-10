@@ -6,11 +6,22 @@ var pg = require('pg');
 //router.use(bodyParser.json()); // support json encoded bodies
 //router.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
 router.get('/', function(request, response){
 	//var user_email = request.body.user_email;
 	//var user_password = request.body.user_password;
 	var user_email = request.query.user_email;
-	console.log(user_email);
+	var user_password = request.query.user_password;
+	
+	if(isEmpty(user_email)){
+		response.send("Error: Email Missing");
+	}
+	if(isEmpty(user_password)){
+		response.send("Error: Password Missing");
+	}
 
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		client.query('SELECT * FROM user_table WHERE user_email = $1', [user_email] ,function(err, result) {
