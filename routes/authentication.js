@@ -40,7 +40,7 @@ router.get('/', function(request, response){
       		done();
       		if (err){ 
        			console.error(err); 
-       			response.send({'error': err});  //Is this the proper way to report an error
+       			return response.send({'error': err});  //Is this the proper way to report an error
        		}
       		else{ 
       			if(result.rowCount == 0)

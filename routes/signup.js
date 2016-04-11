@@ -30,7 +30,7 @@ router.get('/', function(request, response){
       		//done();
       		if (err){ 
        			console.error(err); 
-       			response.send({'error': "Internal Database Error"});
+       			return response.send({'error': "Internal Database Error"});
        		}
       		else{ 
       			if(result.rowCount > 0){
@@ -40,10 +40,11 @@ router.get('/', function(request, response){
               done();
               if (err){ 
                 console.error(err); 
-                response.send({'error': "Internal Database Error"});
+                return response.send({'error': "Internal Database Error"});
               }
               else{
                 console.log("Successful Insertion");
+                return response.send({'success': "New Account Created"});
               }
             });
       		}
