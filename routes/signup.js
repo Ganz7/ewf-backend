@@ -24,13 +24,13 @@ router.get('/', function(request, response){
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		if(err){
 			console.error(err);
-			return response.send({'error': "Internal Database Error"});
+			return response.send({'error': 'Internal Database Error'});
 		}
 		client.query('SELECT * FROM user_table WHERE user_email = $1', [user_email] ,function(err, result) {
       		//done();
       		if (err){ 
        			console.error(err); 
-       			return response.send({'error': "Internal Database Error"});
+       			return response.send({'error': 'Internal Database Error'});
        		}
       		else{ 
       			if(result.rowCount > 0){
@@ -40,11 +40,11 @@ router.get('/', function(request, response){
               done();
               if (err){ 
                 console.error(err); 
-                return response.send({'error': "Internal Database Error"});
+                return response.send({'error': 'Internal Database Error'});
               }
               else{
                 console.log("Successful Insertion");
-                return response.send({'success': "New Account Created"});
+                return response.send({'success': 'New Account Created'});
               }
             });
       		}
