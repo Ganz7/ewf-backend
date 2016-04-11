@@ -36,7 +36,16 @@ router.get('/', function(request, response){
       			if(result.rowCount > 0){
       				return response.send({'error': 'Email Already Exists'});
             }
-            //Insert into user_table
+            client.query('INSERT INTO user_table VALUES ($1, $2, $3)', [user_name, user_email, user_password], function(err, result){
+              done();
+              if (err){ 
+                console.error(err); 
+                response.send({'error': "Internal Database Error"});
+              }
+              else{
+                console.log("Successful Insertion");
+              }
+            });
       		}
     	});
   	});
