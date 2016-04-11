@@ -25,30 +25,30 @@ router.get('/', function(request, response){
 	var user_password = request.query.user_password;
 	
 	if(isEmptyString(user_email)){
-		return response.send("Error: Email Missing");
+		return response.send({'error': 'Email Missing'});
 	}
 	if(isEmptyString(user_password)){
-		return response.send("Error: Password Missing");
+		return response.send({'error': 'Password Missing'});
 	}
 
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		if(err){
 			console.error(err);
-			return response.send("Error " + err);
+			return response.send({'error': err});
 		}
 		client.query('SELECT * FROM user_table WHERE user_email = $1', [user_email] ,function(err, result) {
       		done();
       		if (err){ 
        			console.error(err); 
-       			response.send("Error " + err);  //Is this the proper way to report an error
+       			response.send({'error': err});  //Is this the proper way to report an error
        		}
       		else{ 
       			if(result.rowCount == 0)
-      				return response.send("Error: Invalid User Name.");
+      				return response.send({'error': 'Invalid Username'});
       			else if(result.rowCount == 1 && result.rows[0].user_password === user_password)
       				return response.send(result.rows[0]);
       			else
-      				return response.send("Error: Invalid User Name or Password");
+      				return response.send({'error': 'Invalid Username or Password'});
       		}
     	});
   	});
