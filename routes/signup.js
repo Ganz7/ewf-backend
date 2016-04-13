@@ -44,7 +44,7 @@ router.get('/', function(request, response){
               }
               else{
                 console.log("Successful Insertion");
-                return response.send({'success': 'New Account Created'});
+                return response.send({'success': 'New Account Created', 'user_name': user_name, 'user_email': user_email});
               }
             });
       		}
