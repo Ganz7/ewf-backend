@@ -19,7 +19,7 @@ router.get('/event', function (request, response) {
 		return response.send({'error': 'Incomplete Request'});
 	}
 
-	client.query('INSERT INTO event_table(user_email, event_location, event_start_time, event_end_time
+	client.query('INSERT INTO event_table(user_email, event_location, event_start_time, event_end_time, 
 		event_info) VALUES ($1, $2, $3, $4, $5) RETURNING _event_id', [user_email, event_location, event_start_time, 
 		event_end_time, event_info], function(err, result){
 		done();
