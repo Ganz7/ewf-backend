@@ -35,7 +35,7 @@ router.get('/event', function (request, response) {
 			else{
 				console.log("Successful Insertion");
 				console.log(result);
-				return response.send({'success': 'Event Added', 'user_email': user_email, '_event_id': user_email});
+				return response.send({'success': 'Event Added', 'user_email': user_email, '_event_id': result.rows[0]._event_id});
 			}
 	    });
 	});
