@@ -34,7 +34,7 @@ router.get('/event', function (request, response) {
 		}
     });
 
-}
+});
 
 
 module.exports = router;
