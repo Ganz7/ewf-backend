@@ -24,7 +24,7 @@ router.get('/', function (request, response) {
 			}
 			else{
 				console.log("Successfuly Retrieved");
-				return response.send(result.rows);
+				return response.send({'result':result.rows});
 			}
 		});
 	});
