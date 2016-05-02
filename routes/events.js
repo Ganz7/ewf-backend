@@ -70,7 +70,7 @@ router.get('/user_event_status', function (request, response) {
 			}
 			return response.send({'error': 'Successfuly added'})
 		});
-
+	});
 });
 
 
