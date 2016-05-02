@@ -44,6 +44,35 @@ router.get('/', function (request, response) {
 	});
 });
 
+/* 
+ *	Updates the status of a (user,event) pair (Attending/Not Attending)
+ */
+router.get('/user_event_status', function (request, response) {
+	var user_email = request.query.user_email;
+	var event_id = request.query.event_id;
+	var status = request.query.status;
+
+	if(helper.isEmptyString(user_email) || helper.isEmptyString(event_id)){
+		return response.send({'error': 'Incomplete Request'});
+	}
+
+	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+		if(err){
+			console.error(err);
+			return response.send({'error': err});
+		}
+
+		client.query('UPDATE event_status_table SET user_attendance=$3 WHERE event_id=$1 AND user_email=$2', 
+			[event_id, user_email, status], function(err, result){
+			if (err){ 
+				console.error(err); 
+				return response.send({'error': 'Internal Database Error'});
+			}
+			return response.send({'error': 'Successfuly added'})
+		});
+
+});
+
 
 
 module.exports = router;
