@@ -49,7 +49,7 @@ router.get('/', function (request, response) {
 
 		var events_list = [];
 
-		for(int i; i<users_list.length; i++){
+		for(var i; i<users_list.length; i++){
 			client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
 				[users_list[i], row_count] ,function(err, result) {
 				if (err){ 
