@@ -59,7 +59,7 @@ router.get('/user_event_status', function (request, response) {
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		if(err){
 			console.error(err);
-			return response.send({'error': err});
+			return response.send({'error': "Internal Database Error"});
 		}
 
 		client.query('UPDATE event_status_table SET user_attendance=$3 WHERE event_id=$1 AND user_email=$2', 
@@ -68,7 +68,7 @@ router.get('/user_event_status', function (request, response) {
 				console.error(err); 
 				return response.send({'error': 'Internal Database Error'});
 			}
-			return response.send({'error': 'Successfuly added'})
+			return response.send({'success': 'Successfuly added'})
 		});
 	});
 });
