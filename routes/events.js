@@ -34,7 +34,7 @@ router.get('/', function (request, response) {
 		//var users_list = [user_email];
 		var events_list = [];
 
-		client.query('SELECT DISTINCT A._event_id, A.user_email, A.event_location, A.event_start_time, A.event_end_time, A.event_info '
+		client.query('SELECT DISTINCT A._event_id, A.user_email, A.user_name, A.event_location, A.event_start_time, A.event_end_time, A.event_info '
 			+' FROM event_table A LEFT JOIN friend_table B ON A.user_email = B.user_2 WHERE B.user_1 = $1 OR'
 			+' A.user_email = $1 ORDER BY A.event_start_time DESC LIMIT $2', [user_email, row_count],
 			function(err, result){

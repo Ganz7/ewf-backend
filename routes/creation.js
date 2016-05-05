@@ -9,12 +9,13 @@ function isEmptyString(str) {
 router.get('/event', function (request, response) {
 
 	var user_email = request.query.user_email;
+	var user_name = request.query.user_name;
 	var event_location = request.query.event_location;
 	var event_start_time = request.query.event_start_time;
 	var event_end_time = request.query.event_end_time;
 	var event_info = request.query.event_info;
 
-	if(isEmptyString(user_email) || isEmptyString(event_location) || isEmptyString(event_start_time) 
+	if(isEmptyString(user_email) || isEmptyString(user_name) || isEmptyString(event_location) || isEmptyString(event_start_time) 
 		|| isEmptyString(event_end_time)){
 		return response.send({'error': 'Incomplete Request'});
 	}
@@ -24,9 +25,9 @@ router.get('/event', function (request, response) {
 			console.error(err);
 			return response.send({'error': err});
 		}
-		client.query('INSERT INTO event_table(user_email, event_location, event_start_time, event_end_time, event_info) VALUES ($1, $2, $3, $4, $5) RETURNING _event_id', 
-			[user_email, event_location, event_start_time, 
-			event_end_time, event_info], function(err, result){
+		client.query('INSERT INTO event_table(user_email, user_name, event_location, event_start_time, event_end_time, event_info) VALUES ($1, $2, $3, $4, $5, $6) RETURNING _event_id', 
+			[user_email, user_name, event_location, event_start_time, event_end_time, event_info], 
+			function(err, result){
 			if (err){ 
 				console.error(err); 
 				return response.send({'error': 'Internal Database Error'});
@@ -34,6 +35,8 @@ router.get('/event', function (request, response) {
 
 			var event_id = result.rows[0]._event_id;
 
+
+			// Insert user status as going for the newly created event
 			client.query('INSERT INTO event_status_table VALUES($1, $2, $3)', [event_id, user_email, true],
 				function(err, result){
 				done();
