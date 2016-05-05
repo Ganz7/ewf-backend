@@ -44,12 +44,12 @@ router.get('/', function (request, response) {
 				users_list.push(result.rows[i].user_2);
 			}
 
-			console.log(users_list);
+			console.log("User's list: " + users_list);
 		});
 
 		var events_list = [];
 
-		for(var i; i < users_list.length; i++){
+		for(var i = 0; i < users_list.length; i++){
 			client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
 				[users_list[i], row_count] ,function(err, result) {
 				if (err){ 
@@ -58,7 +58,7 @@ router.get('/', function (request, response) {
 				}
 				console.log("For user "+users_list[i]);
 				console.log(result.rows);
-				
+
 				events_list.push(result.rows);
 				//return response.send({'result':result.rows, 'user_status_result': event_status_result});
 			});
