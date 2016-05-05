@@ -65,7 +65,6 @@ router.get('/', function (request, response) {
 				console.log(events_list);
 			});
 		}
-		done();
 		return response.send({'result': events_list, 'user_status_result': event_status_result});
 	});
 });
