@@ -103,14 +103,29 @@ router.get('/user_event_status', function (request, response) {
 			return response.send({'error': "Internal Database Error"});
 		}
 
-		client.query('UPDATE event_status_table SET user_attendance=$3 WHERE event_id=$1 AND user_email=$2', 
-			[event_id, user_email, status], function(err, result){
-			if (err){ 
-				console.error(err); 
-				return response.send({'error': 'Internal Database Error'});
+		client.query('SELECT * FROM event_status_table WHERE event_id=$1 AND user_email=$2', [event_id, user_email],
+			function(err, result){
+			if(err){
+				console.error(err);
+				return response.send({'error': "Internal Database Error"});
 			}
-			return response.send({'success': 'Successfuly added'})
+			
+			var update_query;
+			if(result.rows.length == 0)
+				update_query = 'INSERT INTO event_status_table VALUES($1, $2, $3)';
+			else
+				update_query = 'UPDATE event_status_table SET user_attendance=$3 WHERE event_id=$1 AND user_email=$2';
+
+			client.query(update_query, [event_id, user_email, status], function(err, result){
+				if (err){ 
+					console.error(err); 
+					return response.send({'error': 'Internal Database Error'});
+				}
+				return response.send({'success': 'Successfuly added'})
+			});
+
 		});
+
 	});
 });
 
