@@ -26,9 +26,9 @@ router.get('/', function (request, response) {
 				console.error(err); 
 				return response.send({'error': 'Internal Database Error'});
 			}
-			else{
-				event_status_result = result.rows;
-			}
+			event_status_result = result.rows;
+			console.log("Event Status Result");
+			console.log(event_status_result);
 		});
 
 		var users_list = [user_email];
@@ -49,24 +49,24 @@ router.get('/', function (request, response) {
 
 		var events_list = [];
 
-		//for(var i = 0; i < users_list.length; i++){
-		for(var user_email in users_list){
+		for(var i = 0; i < users_list.length; i++){
+		//for(var user_email in users_list){
 			client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
-				[user_email, row_count] , function(err, result) {
+				[users_list[i], row_count] , function(err, result) {
 				if (err){ 
 					console.error(err); 
 					return response.send({'error': 'Internal Database Error'});
 				}
-				console.log("For user "+user_email);
+				console.log("For user " + users_list[i]);
 				console.log(result.rows);
 
-				events_list.push(result.rows);
+				events_list = events_list.concat(result.rows);
 				console.log("events list now");
 				console.log(events_list);
 			});
 		}
 		done();
-		return response.send({'results':events_list, 'user_status_result': event_status_result});
+		return response.send({'result': events_list, 'user_status_result': event_status_result});
 	});
 });
 
