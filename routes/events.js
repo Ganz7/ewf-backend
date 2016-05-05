@@ -49,17 +49,18 @@ router.get('/', function (request, response) {
 
 		var events_list = [];
 
-		for(var i; i<users_list.length; i++){
+		for(var i; i < users_list.length; i++){
 			client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
 				[users_list[i], row_count] ,function(err, result) {
 				if (err){ 
 					console.error(err); 
 					return response.send({'error': 'Internal Database Error'});
 				}
-				else{
-					events_list.push(result.rows);
-					//return response.send({'result':result.rows, 'user_status_result': event_status_result});
-				}
+				console.log("For user "+users_list[i]);
+				console.log(result.rows);
+				
+				events_list.push(result.rows);
+				//return response.send({'result':result.rows, 'user_status_result': event_status_result});
 			});
 		}
 		done();
