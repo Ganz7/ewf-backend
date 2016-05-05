@@ -31,8 +31,23 @@ router.get('/', function (request, response) {
 			console.log(event_status_result);
 		});
 
-		var users_list = [user_email];
+		//var users_list = [user_email];
 		var events_list = [];
+
+		client.query('SELECT A._event_id, A.user_email, A.event_location, A.event_start_time, A.event_end_time, A.event_info '
+			+' FROM event_table A RIGHT JOIN friend_table B ON A.user_email = B.user_2 WHERE B.user_1 = \'$1\' OR'
+			+' A.user_email = \'$1\' ORDER BY A.event_start_time DESC LIMIT $2', [user_email, row_count],
+			function(err, result){
+			if (err){ 
+				console.error(err); 
+				return response.send({'error': 'Internal Database Error'});
+			}	
+
+			return response.send({'result': result.rows, 'user_status_result': event_status_result});
+
+		});
+
+		/*
 
 		client.query('SELECT * FROM friend_table where user_1 = $1', [user_email],
 			function(err, result){
@@ -40,7 +55,6 @@ router.get('/', function (request, response) {
 				console.error(err); 
 				return response.send({'error': 'Internal Database Error'});
 			}
-
 			for (var i=0; i<result.rows.length; i++){
 				users_list.push(result.rows[i].user_2);
 			}
@@ -64,6 +78,8 @@ router.get('/', function (request, response) {
 				});
 			}
 			return response.send({'result': events_list, 'user_status_result': event_status_result});
+
+			*/
 			
 		});
 	});
