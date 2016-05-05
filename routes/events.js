@@ -62,7 +62,7 @@ router.get('/', function (request, response) {
 				}
 			});
 		}
-
+		done();
 		return response.send({'result':events_list, 'user_status_result': event_status_result});
 	});
 });
