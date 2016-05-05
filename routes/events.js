@@ -32,6 +32,7 @@ router.get('/', function (request, response) {
 		});
 
 		var users_list = [user_email];
+		var events_list = [];
 
 		client.query('SELECT * FROM friend_table where user_1 = $1', [user_email],
 			function(err, result){
@@ -45,27 +46,26 @@ router.get('/', function (request, response) {
 			}
 
 			console.log("User's list: " + users_list);
+
+			for(var i = 0; i < users_list.length; i++){
+			//for(var user_email in users_list){
+				client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
+					[users_list[i], row_count] , function(err, result) {
+					if (err){ 
+						console.error(err); 
+						return response.send({'error': 'Internal Database Error'});
+					}
+					console.log("For user " + users_list[i]);
+					console.log(result.rows);
+
+					events_list = events_list.concat(result.rows);
+					console.log("events list now");
+					console.log(events_list);
+				});
+			}
+			return response.send({'result': events_list, 'user_status_result': event_status_result});
+			
 		});
-
-		var events_list = [];
-
-		for(var i = 0; i < users_list.length; i++){
-		//for(var user_email in users_list){
-			client.query('SELECT * FROM event_table WHERE user_email = $1 ORDER BY event_start_time DESC LIMIT $2', 
-				[users_list[i], row_count] , function(err, result) {
-				if (err){ 
-					console.error(err); 
-					return response.send({'error': 'Internal Database Error'});
-				}
-				console.log("For user " + users_list[i]);
-				console.log(result.rows);
-
-				events_list = events_list.concat(result.rows);
-				console.log("events list now");
-				console.log(events_list);
-			});
-		}
-		return response.send({'result': events_list, 'user_status_result': event_status_result});
 	});
 });
 
