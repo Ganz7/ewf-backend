@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var pg = require('pg');
 var helper = require('../public/javascripts/helper.js')
 
 /* GET users listing. */
