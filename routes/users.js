@@ -4,7 +4,7 @@ var pg = require('pg');
 var helper = require('../public/javascripts/helper.js')
 
 /* GET users listing. */
-router.get('/', function(reqest, response) {
+router.get('/', function(request, response) {
 	var user_email = request.query.user_email;
 
 	if(helper.isEmptyString(user_email)){
